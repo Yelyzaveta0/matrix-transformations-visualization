@@ -5,6 +5,19 @@ import plotly.graph_objects as go
 def is_symmetric(matrix):
     return np.allclose(matrix, matrix.T)
 
+def is_conistic(matrix):
+    determinant = np.linalg.det(matrix)
+    eigenvalues = np.linalg.eigvals(matrix)
+
+    if determinant > 0 and np.all(eigenvalues > 0):
+        return "Ellipse"
+    elif determinant > 0 and np.all(eigenvalues < 0):
+        return "Ellipse (indefinite)"
+    if determinant < 0:
+        return "Hyperbola"
+    if determinant == 0:
+        return "Parabola"
+
 def apply_transformation(matrix, transformation):
     if transformation == "scale":
         scaling_factor = float(input("Enter the scaling factor: "))
@@ -29,27 +42,37 @@ def apply_transformation(matrix, transformation):
         return matrix
 
 #plots quadratic form of matrix
-def plot_quadratic_form(matrix):
-    x = np.linspace(-100, 100, 1000)
-    y = np.linspace(-100, 100, 1000)
-
+def plot_quadratic_form(matrix, shape):
+    if shape == "Ellipse":
+        x = np.linspace(-10, 10, 200)
+        y = np.linspace(-10, 10, 200)
+    elif shape == "Hyperbola":
+        x = np.linspace(-50, 50, 400)
+        y = np.linspace(-50, 50, 400)
+    elif shape == "Parabola":
+        x = np.linspace(-20, 20, 400)
+        y = np.linspace(-10, 10, 400)
+    else:
+        x = np.linspace(-10, 10, 200)
+        y = np.linspace(-10, 10, 200)
     #N-D coordinate visualization
     X, Y = np.meshgrid(x, y)
     
     #quadratic form of the 2x2 matrix is given by: [x,y]*A*[x;y]
     Z = matrix[0, 0] * X**2 + 2 * matrix[0, 1] * X * Y + matrix[1, 1] * Y**2
+
+    Z = np.clip(Z, -100, 100)
     
     #3-D visualization
-    fig = go.Figure(data=[go.Surface(z=Z, x=X, y=Y)])
+    fig = go.Figure(data=[go.Surface(z=Z, x=X, y=Y, colorscale="Viridis")])
     fig.update_layout(
-        title="Quadratic Form Visualization",
+        title = f"Quadratic Form Visualization ({shape})",
         scene=dict(
             xaxis_title="x",
             yaxis_title="y",
             zaxis_title="f(x, y)"
         )
     )
-
     #writes a separate html page and displays graph
     fig.write_html("matrix.html", auto_open=True)
     #fig.show()
@@ -79,7 +102,9 @@ transformation = input("Enter your choice: ").lower()
 transformed_matrix = apply_transformation(matrix, transformation)
 print("Transformed matrix:")
 print(transformed_matrix)
+shape = is_conistic(transformed_matrix)
+print(f"The shape is: {shape}")
 
 #apply transformations to a matrix and plot it
-plot_quadratic_form(transformed_matrix)
+plot_quadratic_form(transformed_matrix, shape)
 
