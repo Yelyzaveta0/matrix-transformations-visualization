@@ -57,22 +57,100 @@ def plot_quadratic_form(matrix, shape):
         y = np.linspace(-10, 10, 200)
     #N-D coordinate visualization
     X, Y = np.meshgrid(x, y)
-    
-    #quadratic form of the 2x2 matrix is given by: [x,y]*A*[x;y]
     Z = matrix[0, 0] * X**2 + 2 * matrix[0, 1] * X * Y + matrix[1, 1] * Y**2
+    fig = go.Figure(data=[go.Surface(z=Z, x=X, y=Y, colorscale="YlGnBu")])
 
-    Z = np.clip(Z, -100, 100)
-    
-    #3-D visualization
-    fig = go.Figure(data=[go.Surface(z=Z, x=X, y=Y, colorscale="Viridis")])
+    #set initial axis ranges
     fig.update_layout(
-        title = f"Quadratic Form Visualization ({shape})",
         scene=dict(
-            xaxis_title="x",
-            yaxis_title="y",
-            zaxis_title="f(x, y)"
+            xaxis=dict(range=[-10, 10]),
+            yaxis=dict(range=[-10, 10]),
+            zaxis=dict(range=[-100, 100]),
         )
     )
+
+    #add dropdown menu for preset ranges
+    fig.update_layout(
+        updatemenus=[
+            dict(
+                buttons=[
+                    dict(
+                        label="Default Range",
+                        method="relayout",
+                        args=[
+                            {
+                                "scene.xaxis.range": [-10, 10],
+                                "scene.yaxis.range": [-10, 10],
+                                "scene.zaxis.range": [-100, 100],
+                            }
+                        ],
+                    ),
+                    dict(
+                        label="Wide Range",
+                        method="relayout",
+                        args=[
+                            {
+                                "scene.xaxis.range": [-50, 50],
+                                "scene.yaxis.range": [-50, 50],
+                                "scene.zaxis.range": [-500, 500],
+                            }
+                        ],
+                    ),
+                    dict(
+                        label="Close Range",
+                        method="relayout",
+                        args=[
+                            {
+                                "scene.xaxis.range": [-5, 5],
+                                "scene.yaxis.range": [-5, 5],
+                                "scene.zaxis.range": [-50, 50],
+                            }
+                        ],
+                    ),
+                ],
+                direction="down",
+                showactive=True,
+            )
+        ]
+    )
+
+    #sliders for axis ranges
+    sliders = [
+        dict(
+            active=2,
+            currentvalue={"prefix": "X Range: "},
+            steps=[
+                dict(
+                    label=f"[{start}, {start + 20}]",
+                    method="relayout",
+                    args=[
+                        {
+                            "scene.xaxis.range": [start, start + 20],
+                        }
+                    ],
+                )
+                for start in range(-50, 51, 10)
+            ],
+        ),
+        dict(
+            active=2,
+            currentvalue={"prefix": "Y Range: "},
+            steps=[
+                dict(
+                    label=f"[{start}, {start + 20}]",
+                    method="relayout",
+                    args=[
+                        {
+                            "scene.yaxis.range": [start, start + 20],
+                        }
+                    ],
+                )
+                for start in range(-50, 51, 10)
+            ],
+        ),
+    ]
+
+    fig.update_layout(sliders=sliders)
     #writes a separate html page and displays graph
     fig.write_html("matrix.html", auto_open=True)
     #fig.show()
@@ -107,4 +185,3 @@ print(f"The shape is: {shape}")
 
 #apply transformations to a matrix and plot it
 plot_quadratic_form(transformed_matrix, shape)
-
