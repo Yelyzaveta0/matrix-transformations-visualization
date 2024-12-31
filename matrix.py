@@ -58,6 +58,7 @@ def plot_quadratic_form(matrix, shape):
     #N-D coordinate visualization
     X, Y = np.meshgrid(x, y)
     Z = matrix[0, 0] * X**2 + 2 * matrix[0, 1] * X * Y + matrix[1, 1] * Y**2
+    Z = Z - np.min(Z)
     fig = go.Figure(data=[go.Surface(z=Z, x=X, y=Y, colorscale="YlGnBu")])
 
     #set initial axis ranges
@@ -66,6 +67,9 @@ def plot_quadratic_form(matrix, shape):
             xaxis=dict(range=[-10, 10]),
             yaxis=dict(range=[-10, 10]),
             zaxis=dict(range=[-100, 100]),
+            camera=dict(
+                eye=dict(x=1.5, y=1.5, z=1.5)
+            )
         )
     )
 
@@ -75,35 +79,35 @@ def plot_quadratic_form(matrix, shape):
             dict(
                 buttons=[
                     dict(
-                        label="Default Range",
+                        label="Reset View",
                         method="relayout",
                         args=[
                             {
-                                "scene.xaxis.range": [-10, 10],
-                                "scene.yaxis.range": [-10, 10],
-                                "scene.zaxis.range": [-100, 100],
+                                "scene.camera.eye.x": 1.5,
+                                "scene.camera.eye.y": 1.5,
+                                "scene.camera.eye.z": 1.5,
                             }
                         ],
                     ),
                     dict(
-                        label="Wide Range",
+                        label="Top View",
                         method="relayout",
                         args=[
                             {
-                                "scene.xaxis.range": [-50, 50],
-                                "scene.yaxis.range": [-50, 50],
-                                "scene.zaxis.range": [-500, 500],
+                                "scene.camera.eye.x": 0,
+                                "scene.camera.eye.y": 0,
+                                "scene.camera.eye.z": 2.5,
                             }
                         ],
                     ),
                     dict(
-                        label="Close Range",
+                        label="Side View",
                         method="relayout",
                         args=[
                             {
-                                "scene.xaxis.range": [-5, 5],
-                                "scene.yaxis.range": [-5, 5],
-                                "scene.zaxis.range": [-50, 50],
+                                "scene.camera.eye.x": 2.5,
+                                "scene.camera.eye.y": 0,
+                                "scene.camera.eye.z": 0,
                             }
                         ],
                     ),
