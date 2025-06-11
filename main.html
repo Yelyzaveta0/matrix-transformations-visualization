@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quadratic Form Visualizer</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.js"></script>
+</head>
+<body>
+  <h1>Quadratic Form Visualizer</h1>
+  <label>Matrix A (symmetric):</label>
+  <input id="a11" type="number" step="any" placeholder="a11">
+  <input id="a12" type="number" step="any" placeholder="a12 = a21">
+  <input id="a22" type="number" step="any" placeholder="a22">
+  <button onclick="plotSurface()">Graph</button>
+
+  <div id="plot"></div>
+  <link rel="stylesheet" href="style.css">
+  <script> src="script.js"</script>
+</body>
+</html>
