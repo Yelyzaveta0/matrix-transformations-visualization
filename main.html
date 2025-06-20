@@ -10,12 +10,22 @@
 </head>
 <body>
   <h1>Quadratic Form Visualizer</h1>
-  <label>Matrix A (symmetric):</label>
-  <input id="a11" type="number" step="any" placeholder="a11">
-  <input id="a12" type="number" step="any" placeholder="a12 = a21">
-  <input id="a22" type="number" step="any" placeholder="a22">
-  <button onclick="plotMatrix()">Graph</button>
-
+  <div class="input-section">
+    <label>Matrix A (symmetric):</label>
+    <input id="a11" type="number" step="any" placeholder="a11">
+    <input id="a12" type="number" step="any" placeholder="a12 = a21">
+    <input id="a22" type="number" step="any" placeholder="a22">
+    <button onclick="plotMatrix()">Graph</button>
+  </div>
+  <div class="transformation-section">
+    <label>Scale Factor:</label>
+    <input id="scale" type="number" step="0.1" value="1">
+    <label>Rotation Angle (degrees):</label>
+    <input id="rotation" type="number" step="1" value="0">
+    <label>Shear Factor:</label>
+    <input id="shear" type="number" step="0.1" value="0">
+    <button onclick="transformMatrix()">Apply Transformation</button>
+  </div>
   <div id="plot"></div>
   <link rel="stylesheet" href="style.css">
 </body>
