@@ -1,4 +1,3 @@
-
 function plotMatrix() {
   const a11 = parseFloat(document.getElementById("a11").value);
   const a12 = parseFloat(document.getElementById("a12").value);
@@ -22,6 +21,27 @@ function plotMatrix() {
   }
 
   const shape = shapeMatrix(a11, a12, a22);
+
+  function scaleMatrix(matrix, scale_factor) {
+    return matrix.map(row => row.map(value => value * scale_factor));
+  }
+
+  function rotateMatrix(matrix, angle) {
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+    return [
+      [cos * matrix[0][0] - sin * matrix[0][1], cos * matrix[0][1] + sin * matrix[0][0]],
+      [cos * matrix[1][0] - sin * matrix[1][1], cos * matrix[1][1] + sin * matrix[1][0]]
+    ];
+  }
+
+  function shearMatrix(matrix, shear_factor) {
+    return [
+      [matrix[0][0] + shear_factor * matrix[1][0], matrix[0][1] + shear_factor * matrix[1][1]],
+      [matrix[1][0] + shear_factor * matrix[0][0], matrix[1][1] + shear_factor * matrix[0][1]]
+    ];
+  }
+
 
   const x = math.range(-10, 10, 0.2).toArray();
   const y = math.range(-10, 10, 0.2).toArray();
