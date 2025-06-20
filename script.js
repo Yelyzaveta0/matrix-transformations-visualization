@@ -46,14 +46,18 @@ function plotMatrix() {
     x: x,
     y: y,
     type: "surface",
-    colorscale: "Electric",
+    colorscale: "RdBu",
     showscale: true, 
     contours: {
       z: {
         show: true,
         usecolormap: true,
         highlightcolor: "#42f5ef",
-        project: { z: true }
+        project: { z: true }, 
+        width: 2,
+        start: minZ,
+        end: maxZ,
+        size: (maxZ - minZ)/10
       }
     }
   }];
@@ -63,9 +67,10 @@ function plotMatrix() {
     scene: {
       xaxis: { title: "x", range: [-10, 10] },
       yaxis: { title: "y", range: [-10, 10] },
-      zaxis: { title: "f(x,y)", range: [minZ - 1, maxZ + 11] },
+      zaxis: { title: "f(x,y)", range: [Math.min(-10, minZ), Math.max(10, maxZ)] },
       camera: {
-        eye: { x: 1.2, y: 1.2, z: 1.0 },
+        eye: { x: 0, y: -2, z: 0.5 },
+        up: { x: 0, y: 0, z: 1 }
       }
     },
   };
