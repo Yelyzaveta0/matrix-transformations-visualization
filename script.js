@@ -21,9 +21,12 @@ function shearMatrix(matrix, shearFactor) {
 
 function shapeMatrix(a11, a12, a22) {
   const determinant = a11 * a22 - a12 * a12;
-  if (determinant > 0) return "Ellipse";
-  if (determinant < 0) return "Hyperbola";
-  return "Parabola";
+  if (determinant > 0) {
+    return "Ellipse";
+  } else if (determinant < 0) {
+    return "Hyperbola";
+  } else {
+  } return "Parabola";
 }
 
 function plotMatrix() {
@@ -102,7 +105,7 @@ function plotMatrix() {
     }
     z.push(row);
   }
-  
+
   const minZ = Math.min(...z.flat());
   const maxZ = Math.max(...z.flat());
   const data = [{
