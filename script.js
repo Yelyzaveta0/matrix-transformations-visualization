@@ -34,6 +34,8 @@ function plotMatrix() {
   const a12 = parseFloat(document.getElementById("a12").value);
   const a22 = parseFloat(document.getElementById("a22").value);
 
+  const shape = shapeMatrix(a11, a12, a22);
+
   let matrix = [
     [a11, a12],
     [a12, a22]
@@ -63,44 +65,24 @@ function plotMatrix() {
   const normalizedMatrix = matrix.map(row => row.map(value => value / maxVal));
 
   visualizeMatrix(normalizedMatrix);
+}
 
+function visualizeMatrix(matrix) {
+  const a11 = matrix[0][0];
+  const a12 = matrix[0][1];
+  const a22 = matrix[1][1];
+  const shape = shapeMatrix(a11, a12, a22);
+
+  const x = math.range(-10, 10, 0.2).toArray();
+  const y = math.range(-10, 10, 0.2).toArray();
+  const z = [];
   
-
-
-  function transformMatrix() {
-    if (!originalMatrix) {
-      alert("Please enter a valid matrix.");
-      return;
-    }
-    
-    const scaleFactor = parseFloat(document.getElementById("scale").value);
-    const angle = parseFloat(document.getElementById("angle").value) * Math.PI / 180; // Convert to radians
-    const shearFactor = parseFloat(document.getElementById("shear").value);
-
-    let transformedMatrix = scaleMatrix(matrix, scaleFactor);
-    transformedMatrix = rotateMatrix(transformedMatrix, angle);
-    transformedMatrix = shearMatrix(transformedMatrix, shearFactor);
-    const maxVal = Math.max(...transformedMatrix.flat().map(Math.abs), 1);
-    const normalizedMatrix = transformedMatrix.map(row => row.map(value => value / maxVal));
-
-    visualizeMatrix(normalizedMatrix);
-  }
-
-  function visualizeMatrix(matrix) {
-    const a11 = matrix[0][0];
-    const a12 = matrix[0][1];
-    const a22 = matrix[1][1];
-    const shape = shapeMatrix(a11, a12, a22);
-    const x = math.range(-10, 10, 0.2).toArray();
-    const y = math.range(-10, 10, 0.2).toArray();
-    const z = [];
-    
-    for (let i = 0; i < y.length; i++) {
+  for (let i = 0; i < y.length; i++) {
     const row = [];
     for (let j = 0; j < x.length; j++) {
       const xi = x[j];
       const yi = y[i];
-      const value = matrix[0][0]*xi*xi + 2*matrix[0][1]*xi*yi + matrix[1][1]*yi*yi;
+      const value = a11*xi*xi + 2*a12*xi*yi + a22*yi*yi;
       row.push(value);
     }
     z.push(row);
@@ -108,6 +90,7 @@ function plotMatrix() {
 
   const minZ = Math.min(...z.flat());
   const maxZ = Math.max(...z.flat());
+
   const data = [{
     z: z,
     x: x,
@@ -142,7 +125,4 @@ function plotMatrix() {
     },
   };
   Plotly.newPlot("plot", data, layout);
-  }
 }
-
-
